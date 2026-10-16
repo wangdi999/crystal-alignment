@@ -6,6 +6,7 @@ file=ROOT/'dist/crystal-alignment.html'
 archive=ROOT/'dist/crystal-alignment.zip'
 report=json.loads((ROOT/'artifacts/browser-report.json').read_text(encoding='utf-8'))
 assert not report['errors']
+assert not json.loads((ROOT/'artifacts/rogue-browser-report.json').read_text(encoding='utf-8'))['errors']
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as output:
     output.writestr('晶核归位.html',file.read_bytes())
 with zipfile.ZipFile(archive) as output:

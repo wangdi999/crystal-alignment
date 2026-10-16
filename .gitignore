@@ -1,6 +1,7 @@
 artifacts/*
 !artifacts/*.png
 !artifacts/browser-report.json
+!artifacts/rogue-browser-report.json
 dist/
 .test-tools/
 __pycache__/

@@ -152,6 +152,7 @@
   };
   let lastKey=0;
   document.addEventListener('keydown',e=>{
+    if($('classic-screen')?.hidden)return;
     const key=e.key.toLowerCase();
     if(modalOpen){
       if(key==='escape'){e.preventDefault();closeModal();}
@@ -186,5 +187,6 @@
   // 页面进入后台时停止计时，避免把离开网页的时间算作解题时间。
   document.addEventListener('visibilitychange',save);
   window.addEventListener('pagehide',save);
+  window.addEventListener('crystal:sound',e=>sound(e.detail));
   begin(C.LEVELS.findIndex(l=>l.id===progress.current));
 })();

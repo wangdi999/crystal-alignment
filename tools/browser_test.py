@@ -6,6 +6,7 @@ local=ROOT/'.test-tools'
 if local.exists():sys.path.insert(0,str(local))
 from playwright.sync_api import sync_playwright
 FILE=ROOT/'dist/crystal-alignment.html'
+URL=FILE.as_uri()+'?mode=classic'
 passed=[];errors=[]
 def check(value,name):
     assert value,name
@@ -20,7 +21,7 @@ with sync_playwright() as pw:
     page.on('console',lambda msg:errors.append(msg.text) if msg.type=='error' else None)
     def level(i):page.locator(f'[data-level="{i}"]').click()
     def key(direction):page.keyboard.press({'up':'ArrowUp','right':'ArrowRight','down':'ArrowDown','left':'ArrowLeft'}[direction])
-    page.goto(FILE.as_uri());page.wait_for_load_state('load')
+    page.goto(URL);page.wait_for_load_state('load')
     check(page.locator('#levels button').count()==6,'离线单文件加载六关，无外部资源依赖')
     page.screenshot(path=str(ROOT/'artifacts/01-desktop.png'),full_page=True)
     key('up');check(page.locator('#moves').inner_text()=='0','碰墙不计步')
@@ -62,18 +63,18 @@ with sync_playwright() as pw:
     # 在新浏览器会话启动前设置损坏存档，避免旧页面关闭时的自动保存覆盖夹具。
     corrupt=browser.new_context();corrupt.set_offline(True)
     corrupt.add_init_script("localStorage.setItem('crystal-lab-v2',JSON.stringify({current:2,sessions:{2:{path:['down','__proto__']}},completed:{2:{moves:'<img src=x>'}}}))")
-    damaged=corrupt.new_page();damaged.on('pageerror',lambda e:errors.append(str(e)));damaged.goto(FILE.as_uri())
+    damaged=corrupt.new_page();damaged.on('pageerror',lambda e:errors.append(str(e)));damaged.goto(URL)
     check(damaged.locator('#moves').inner_text()=='0' and damaged.locator('#progress').inner_text()=='0 / 6 完成','非法存档安全回到合法起点')
     corrupt.close()
     broken=browser.new_context();broken.set_offline(True)
     broken.add_init_script("localStorage.setItem('crystal-lab-v2','{broken')")
-    damaged=broken.new_page();damaged.on('pageerror',lambda e:errors.append(str(e)));damaged.goto(FILE.as_uri())
+    damaged=broken.new_page();damaged.on('pageerror',lambda e:errors.append(str(e)));damaged.goto(URL)
     check(damaged.locator('#level-name').inner_text()=='认识推动','损坏 JSON 不阻止启动')
     broken.close()
     context.close()
     mobile=browser.new_context(viewport={'width':390,'height':844},is_mobile=True,has_touch=True)
     mobile.set_offline(True);phone=mobile.new_page();phone.on('pageerror',lambda e:errors.append(str(e)))
-    phone.goto(FILE.as_uri());phone.wait_for_load_state('load')
+    phone.goto(URL);phone.wait_for_load_state('load')
     check(phone.evaluate('document.documentElement.scrollWidth<=innerWidth'),'手机尺寸没有横向溢出')
     phone.screenshot(path=str(ROOT/'artifacts/03-mobile.png'),full_page=True)
     phone.locator('#level-select').select_option('1');phone.get_by_role('button',name='向下',exact=True).tap()
@@ -89,7 +90,7 @@ with sync_playwright() as pw:
     mobile.close()
     denied=browser.new_context();denied.set_offline(True)
     denied.add_init_script("Storage.prototype.setItem=function(){throw new Error('blocked')};Storage.prototype.getItem=function(){throw new Error('blocked')}")
-    blocked=denied.new_page();blocked.goto(FILE.as_uri());blocked.get_by_role('button',name='向右',exact=True).click()
+    blocked=denied.new_page();blocked.goto(URL);blocked.get_by_role('button',name='向右',exact=True).click()
     check(blocked.get_by_role('dialog').count()==1 and '仍可游玩' in blocked.locator('#save-note').inner_text(),'存储被拒绝时仍可正常通关')
     denied.close();browser.close()
 check(not errors,'浏览器无脚本或控制台错误')
