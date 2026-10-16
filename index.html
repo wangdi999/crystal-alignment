@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101a1e"><title>晶核归位 · 共鸣实验室</title><link rel="stylesheet" href="styles.css"></head>
+<body><div class="shell">
+<header class="topbar"><span class="brand"><span>◈</span> 共鸣实验室</span><div class="top-tools"><span id="progress" class="progress">0 / 6 完成</span><button id="sound" class="quiet" aria-pressed="false">声音：关</button></div></header>
+<main><div class="title-row"><div><div class="eyebrow">CRYSTAL ALIGNMENT</div><h1>晶核归位</h1><p>推动晶核，留下转身的空间。</p></div><span id="save-note" class="save-note" role="status">随时尝试，随时撤销</span></div>
+<label class="mobile-picker">实验关卡<select id="level-select" aria-label="选择实验关卡"></select></label>
+<div class="puzzle-layout">
+<aside class="level-panel panel"><div class="kicker">实验档案 / 06</div><h2>选择关卡</h2><div id="levels" class="level-list"></div><p class="fine">三个基础实验，三个进阶挑战。<br>全部关卡可直接选择。</p></aside>
+<section class="arena" aria-label="解谜实验区"><div class="arena-top"><div><div id="level-id" class="kicker"></div><h2 id="level-name"></h2></div><div class="metrics"><div><b id="moves">0</b><span>移动</span></div><div><b id="pushes">0</b><span>推动</span></div><div><b id="docked">0/1</b><span>归位</span></div></div></div>
+<p id="subtitle" class="subtitle"></p><div id="board" class="board" tabindex="0" role="group" aria-label="解谜棋盘，方向键或 WASD 移动"></div>
+<div id="notice" class="board-notice" role="status" aria-live="polite"></div>
+<div class="arena-bottom"><div class="actions"><button id="undo" title="Z / Ctrl+Z">↶ 撤销</button><button id="redo" title="Y / Shift+Z">↷ 重做</button><button id="restart" title="R">↻ 重开</button><button id="hint" class="hint-button" title="H">一点提示</button></div><div class="dpad" aria-label="方向控制"><button data-dir="up" aria-label="向上">↑</button><button data-dir="left" aria-label="向左">←</button><button data-dir="down" aria-label="向下">↓</button><button data-dir="right" aria-label="向右">→</button></div></div>
+<div class="legend"><span><i class="mini player"></i>研究员</span><span><i class="mini crystal"></i>晶核</span><span><i class="mini target"></i>目标位</span></div><p class="keyboard-note">方向键 / WASD 移动 · Z 撤销 · Y 重做 · R 重开 · H 提示<br><span>触屏可在棋盘上滑动，或点击方向按钮。</span></p></section>
+<aside class="notes"><section class="panel"><div class="kicker">观察 / 思考</div><h3>这次需要留意</h3><p id="intent"></p><details class="help"><summary>查看操作说明</summary><ol><li>沿四方向移动，每次一格。</li><li>推动相邻晶核，不能拉动或同时推两颗。</li><li>让所有晶核进入圆形目标位。</li><li>红色叹号表示无法推出的死位，撤销即可恢复。</li><li>提示只指引一步，不代替你完成关卡。</li></ol></details></section><section class="panel"><div class="kicker">实验记录</div><h3>本关进展</h3><div id="observations"></div><button id="export" class="quiet">导出我的记录</button></section></aside>
+</div></main><footer>没有倒计时，也没有失败惩罚。每次撤销，都是重新思考的机会。</footer></div>
+<div id="modal"></div><script src="engine.js"></script><script src="app.js"></script></body></html>

@@ -1,0 +1,13 @@
+{
+  "name": "crystal-alignment",
+  "version": "1.0.0",
+  "private": true,
+  "description": "晶核归位：六关离线推箱解谜游戏",
+  "scripts": {
+    "test": "node --test tests/engine.test.cjs",
+    "build": "node tools/build.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
